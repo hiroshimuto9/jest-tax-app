@@ -367,6 +367,34 @@ describe('退職金の所得税', () => {
         } as any)).toThrow('Invalid argument.')
       })
     })
+
+    describe('不正なオブジェクトの場合', () => {
+      test('意図していないプロパティが含まれる場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 100,
+          isDisability: false,
+          isBoardMember: false,
+          severancePay: 100_000_000,
+          unknownProperty: 'something',
+        } as any)).toThrow('Invalid argument.')
+      })
+
+      test('空オブジェクトの場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay({} as any)).toThrow('Invalid argument.')
+      })
+
+      test('オブジェクトでない場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay('' as any)).toThrow('Invalid argument.')
+      })
+
+      test('undefinedの場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay(undefined as any)).toThrow('Invalid argument.')
+      })
+
+      test('nullの場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay(null as any)).toThrow('Invalid argument.')
+      })
+    })
   })
   /* eslint-enable */
 })
