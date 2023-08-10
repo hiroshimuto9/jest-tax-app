@@ -119,12 +119,7 @@ const calcSeverancePayTaxInputSchema = z
     severancePay: z.number().int().gte(0).lte(1_000_000_000_000)
   }).strict()
 
-type CalcSeverancePayTaxInput = {
-  yearsOfService: number
-  isDisability: boolean
-  isBoardMember: boolean
-  severancePay: number
-}
+type CalcSeverancePayTaxInput = z.infer<typeof calcSeverancePayTaxInputSchema>
 /**
  * 退職金の所得税を計算する
  * @param input 勤続年数 / 障害者起因可否 / 役員等可否 / 退職金
