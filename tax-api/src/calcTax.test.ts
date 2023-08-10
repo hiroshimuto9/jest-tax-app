@@ -279,6 +279,30 @@ describe('退職金の所得税', () => {
         } as any)).toThrow('Invalid argument.')
       })
     })
+
+    describe('障害者となったことに直接基因して退職したかは真偽値であること', () => {
+      test.each`
+        isDisability
+        ${null}
+        ${undefined}
+        ${'something string'}
+      `('障害者となったことに直接基因して退職したか：$isDisabilityはエラー', ({ isDisability }) => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 1,
+          isDisability,
+          isBoardMember: false,
+          severancePay: 100_000_000,
+        })).toThrow('Invalid argument.')
+      })
+
+      test('障害者となったことに直接基因して退職したかが未定義の場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 1,
+          isBoardMember: false,
+          severancePay: 100_000_000,
+        } as any)).toThrow('Invalid argument.')
+      })
+    })
   })
   /* eslint-enable */
 })
