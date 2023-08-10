@@ -119,7 +119,7 @@ type CalcSeverancePayTaxInput = {
 }
 /**
  * 退職金の所得税を計算する
- * @param input
+ * @param input 勤続年数 / 障害者起因可否 / 役員等可否 / 退職金
  * @returns 退職金の所得税
  */
 export const calcIncomeTaxForSeverancePay = (input: CalcSeverancePayTaxInput): number => {
