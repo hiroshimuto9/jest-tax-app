@@ -55,3 +55,42 @@ export const calcTaxableRetirementIncome = (input: CalcTaxableRetirementIncomeIn
   // 1000円未満の端数は切り捨て
   return Math.floor(calc() / 1000) * 1000
 }
+
+
+type CalcIncomeTaxBase = {
+  taxableRetirementIncome: number
+}
+
+/**
+ * 基準所得税額を計算する
+ * @param input 課税退職所得金額 / 税率 / 控除額
+ * @returns 基準所得税額
+ */
+export const calcIncomeTaxBase = (input: CalcIncomeTaxBase): number => {
+  if (input.taxableRetirementIncome === 0) return 0
+
+  // 基準所得税額 = 課税退職所得金額 × 税率 - 控除額
+  const calc = (income: number, taxRate: number, deduction: number) => {
+    return (income * taxRate) / 100 - deduction
+  }
+
+  // 課税退職所得金額の上限値、税率、控除額を保持
+  const taxBrackets = [
+    { limit: 1_949_000, rate: 5, deduction: 0 },
+    { limit: 3_299_000, rate: 10, deduction: 97_500 },
+    { limit: 6_949_000, rate: 20, deduction: 427_500 },
+    { limit: 8_999_000, rate: 23, deduction: 636_000 },
+    { limit: 17_999_000, rate: 33, deduction: 1_536_000 },
+    { limit: 39_999_000, rate: 40, deduction: 2_796_000 },
+    { limit: Infinity, rate: 45, deduction: 4_796_000 },
+  ];
+
+  const bracket = taxBrackets.find(taxBracket => input.taxableRetirementIncome <= taxBracket.limit);
+
+  // limitにInfinityが設定されているため、undefinedが返ってくることは起こり得ないが、将来の変更に備えてエラーハンドリングを実装
+  if (!bracket) {
+    throw new Error("Tax bracket not found");
+  }
+
+  return calc(input.taxableRetirementIncome, bracket.rate, bracket.deduction)
+}
