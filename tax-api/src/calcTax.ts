@@ -94,3 +94,18 @@ export const calcIncomeTaxBase = (input: CalcIncomeTaxBase): number => {
 
   return calc(input.taxableRetirementIncome, bracket.rate, bracket.deduction)
 }
+
+type CalcTaxWithheld = {
+  incomeTaxBase: number
+}
+
+/**
+ * 基準所得税額を計算する
+ * @param input 基準所得税額
+ * @returns 基準所得税額
+ */
+export const calcTaxWithheld = (input: CalcTaxWithheld): number => {
+  // 浮動小数点演算による丸め誤差を回避するため、整数計算を行う
+  const taxWithheld = Math.floor((input.incomeTaxBase * 1021) / 1000)
+  return taxWithheld
+}
