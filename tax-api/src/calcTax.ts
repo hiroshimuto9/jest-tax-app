@@ -100,9 +100,9 @@ type CalcTaxWithheld = {
 }
 
 /**
- * 基準所得税額を計算する
+ * 所得税の源泉徴収税額を計算する
  * @param input 基準所得税額
- * @returns 基準所得税額
+ * @returns 所得税の源泉徴収税額
  */
 export const calcTaxWithheld = (input: CalcTaxWithheld): number => {
   // 浮動小数点演算による丸め誤差を回避するため、整数計算を行う
