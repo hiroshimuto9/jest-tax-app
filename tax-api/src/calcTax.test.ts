@@ -303,6 +303,30 @@ describe('退職金の所得税', () => {
         } as any)).toThrow('Invalid argument.')
       })
     })
+
+    describe('役員等かどうかは真偽値であること', () => {
+      test.each`
+        isBoardMember
+        ${null}
+        ${undefined}
+        ${'something string'}
+      `('役員等かどうか：$isBoardMemberはエラー', ({ isBoardMember }) => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 1,
+          isDisability: false,
+          isBoardMember,
+          severancePay: 100_000_000,
+        })).toThrow('Invalid argument.')
+      })
+
+      test('役員等かどうかかが未定義の場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 1,
+          isDisability: false,
+          severancePay: 100_000_000,
+        } as any)).toThrow('Invalid argument.')
+      })
+    })
   })
   /* eslint-enable */
 })
