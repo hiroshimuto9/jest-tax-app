@@ -1,4 +1,4 @@
-import { calcRetirementIncomeDeduction, calcTaxableRetirementIncome, calcIncomeTaxBase } from './calcTax'
+import { calcRetirementIncomeDeduction, calcTaxableRetirementIncome, calcIncomeTaxBase, calcTaxWithheld } from './calcTax'
 
 describe('退職所得控除額', () => {
   const testDeduction = (yearsOfService: number, isDisability: boolean, expected: number) => {
@@ -197,5 +197,20 @@ describe('基準所得税額', () => {
       taxableRetirementIncome
     })
     expect(incomeTaxBase).toBe(expected)
+  })
+})
+
+describe('所得税の源泉徴収税額', () => {
+  test.each`
+    incomeTaxBase | expected
+    ${0}          | ${0}
+    ${50}         | ${51}
+    ${120}        | ${122}
+    ${1000}       | ${1021}
+  `('基準所得税額$incomeTaxBase円→$expected円', ({ incomeTaxBase, expected }) => {
+    const taxWithheld = calcTaxWithheld({
+      incomeTaxBase
+    })
+    expect(taxWithheld).toBe(expected)
   })
 })
