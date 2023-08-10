@@ -327,6 +327,46 @@ describe('退職金の所得税', () => {
         } as any)).toThrow('Invalid argument.')
       })
     })
+
+    describe('退職金は0以上1000000000000以下の整数であること', () => {
+      test.each`
+        severancePay
+        ${-1}
+        ${1_000_000_000_001}
+        ${100_000.5}
+        ${null}
+        ${undefined}
+        ${'something string'}
+      `('退職金$severancePay円はエラー', ({ severancePay }) => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 5,
+          isDisability: false,
+          isBoardMember: false,
+          severancePay,
+        })).toThrow('Invalid argument.')
+      })
+
+      test.each`
+        severancePay | expected
+        ${0}           | ${0}
+        ${1_000_000_000_000} | ${229705400884}
+      `('退職金$severancePay円は成功', ({ severancePay, expected }) => {
+        expect(calcIncomeTaxForSeverancePay({
+          yearsOfService: 100,
+          isDisability: false,
+          isBoardMember: false,
+          severancePay,
+        })).toBe(expected)
+      })
+
+      test('退職金が未定義の場合はエラー', () => {
+        expect(() => calcIncomeTaxForSeverancePay({
+          yearsOfService: 100,
+          isDisability: false,
+          isBoardMember: false,
+        } as any)).toThrow('Invalid argument.')
+      })
+    })
   })
   /* eslint-enable */
 })
