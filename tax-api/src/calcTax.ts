@@ -111,7 +111,7 @@ export const calcTaxWithheld = (input: CalcTaxWithheld): number => {
   return taxWithheld
 }
 
-const calcSeverancePayTaxInputSchema = z
+export const calcSeverancePayTaxInputSchema = z
   .object({
     yearsOfService: z.number().int().gte(1).lte(100),
     isDisability: z.boolean(),
