@@ -7,7 +7,7 @@
     "npm": "9.3.1"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.5.1",
+    "@chakra-ui/react": "^2.8.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@hookform/resolvers": "^2.9.11",
@@ -25,7 +25,7 @@
     "react-hook-form": "^7.43.2",
     "react-icons": "^3.11.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.9.5",
+    "typescript": "^5.1.6",
     "web-vitals": "^2.1.4",
     "zod": "^3.20.6"
   },
