@@ -60,4 +60,30 @@ describe('useCalcTax', () => {
       severancePay: 3_000_000,
     })
   })
+
+  test('所得税計算APIがBad Requestを返す場合', async () => {
+    // APIのモックとなるハンドラを登録し、指定したURLに対して、指定したレスポンスを返す
+    server.use(
+      rest.post('http://localhost:3000/calc-tax', async (req, res, ctx) => {
+        return res(ctx.status(400), ctx.json({ message: 'Invalid parameter.' }))
+      }),
+    )
+    const { result } = renderHook(() => useCalcTax())
+    act(() => {
+      result.current.mutate({
+        yearsOfService: 6,
+        isDisability: false,
+        isBoardMember: false,
+        severancePay: 3_000_000,
+      })
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    // TanStack Query は 400 をエラーとはみなさない
+    expect(result.current.isError).toBe(false)
+    expect(result.current.data?.status).toBe(400)
+    expect(await result.current.data?.json()).toStrictEqual({
+      message: 'Invalid parameter.',
+    })
+  })
 })
