@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import {
   Button,
@@ -23,20 +23,21 @@ import {
   VStack,
 } from '@chakra-ui/react'
 
-type FormInputs = {
+export type FormInputs = {
   yearsOfService: string
   isDisability: boolean
   isBoardMember: string
   severancePay: string
 }
 
-export const InputForm = ({ ...props }: CardProps) => {
+type InputFormProps = CardProps & {
+  onInputFormSubmit: SubmitHandler<FormInputs>
+}
+
+export const InputForm = ({ onInputFormSubmit, ...props }: InputFormProps) => {
   // フォーム値の型を渡してRHFのuseFormフックを呼び出す
   const { register, handleSubmit } = useForm<FormInputs>()
-  // フォームをサブミットしたときに呼び出されるコールバック関数を仮実装
-  const onInputFormSubmit = (formInputs: FormInputs) => {
-    console.log('formInputs', formInputs)
-  }
+
   return (
     <Card w="400px" {...props}>
       <CardHeader>
