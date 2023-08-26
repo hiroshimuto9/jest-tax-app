@@ -25,8 +25,7 @@ export const Presentation = ({ tax, onInputFormSubmit }: PresentationProps) => (
 )
 
 export const Page = () => {
-  // TODO APIからデータを取得する
-  const [tax] = useState(10000)
+  const [tax, setTax] = useState<number | null>(null)
 
   // フックを使用してmutate関数を取得する
   const { mutate } = useCalcTax()
@@ -45,7 +44,7 @@ export const Page = () => {
       onSuccess: async (data) => {
         if (data.ok) {
           const json = (await data.json()) as CalcTaxResult
-          console.log('json:', json)
+          setTax(json.tax)
         }
       },
     })
