@@ -5,6 +5,7 @@ import { Heading, HStack, Spacer, VStack } from '@chakra-ui/react'
 
 import { FormInputs, InputForm } from './InputForm'
 import { Result } from './Result'
+import { CalcTaxParam, CalcTaxResult, useCalcTax } from './useCalcTax'
 
 type PresentationProps = {
   tax: number | null
@@ -27,8 +28,27 @@ export const Page = () => {
   // TODO APIからデータを取得する
   const [tax] = useState(10000)
 
+  // フックを使用してmutate関数を取得する
+  const { mutate } = useCalcTax()
+
   const handleInputFormSubmit = (formInputs: FormInputs) => {
-    console.log('formInputs', formInputs)
+    // フォームとAPIパラメータで型が異なるので変換
+    const params: CalcTaxParam = {
+      yearsOfService: Number(formInputs.yearsOfService),
+      isDisability: formInputs.isDisability,
+      isBoardMember: !!Number(formInputs.isBoardMember),
+      severancePay: Number(formInputs.severancePay),
+    }
+
+    // API呼び出し
+    mutate(params, {
+      onSuccess: async (data) => {
+        if (data.ok) {
+          const json = (await data.json()) as CalcTaxResult
+          console.log('json:', json)
+        }
+      },
+    })
   }
 
   return <Presentation tax={tax} onInputFormSubmit={handleInputFormSubmit} />
