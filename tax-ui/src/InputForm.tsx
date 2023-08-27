@@ -102,7 +102,7 @@ export const InputForm = ({ onInputFormSubmit, ...props }: InputFormProps) => {
                 </Stack>
               </RadioGroup>
             </FormControl>
-            <FormControl>
+            <FormControl isInvalid={!!errors.severancePay}>
               <FormLabel fontWeight="bold">退職金</FormLabel>
               <InputGroup w="200px">
                 <Input
