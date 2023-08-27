@@ -201,3 +201,54 @@ describe('ページコンポーネント', () => {
     })
   })
 })
+
+describe('勤続年数のバリデーションエラーになる', () => {
+  test.each`
+    yearsOfServiceValue
+    ${'-1'}
+    ${'0'}
+    ${'101'}
+    ${'105'}
+  `('勤続年数$yearsOfServiceValue', async ({ yearsOfServiceValue }) => {
+    const user = userEvent.setup()
+    render(<Page />)
+
+    // 事前確認
+    expect(screen.queryByText('有効な勤続年数を入力してください')).toBeNull()
+
+    const yearsTextBox = screen.getByLabelText('勤続年数')
+    await user.clear(yearsTextBox)
+    await user.type(yearsTextBox, yearsOfServiceValue)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('有効な勤続年数を入力してください'),
+      ).toBeInTheDocument()
+      expect(screen.getByLabelText('tax').textContent).toBe('---円')
+    })
+  })
+})
+
+describe('退職金のバリデーションエラーになる', () => {
+  test.each`
+    severancePayValue
+    ${'-1'}
+    ${'1000000000001'}
+    ${'8000000.1'}
+  `('退職金$severancePayValue', async ({ severancePayValue }) => {
+    const user = userEvent.setup()
+    render(<Page />)
+
+    expect(screen.queryByText('有効な退職金を入力してください')).toBeNull()
+    const payTextBox = screen.getByLabelText('退職金')
+    await user.clear(payTextBox)
+    await user.type(payTextBox, severancePayValue)
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('有効な退職金を入力してください'),
+      ).toBeInTheDocument()
+    })
+    expect(screen.getByLabelText('tax').textContent).toBe('---円')
+  })
+})
