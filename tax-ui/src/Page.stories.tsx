@@ -1,4 +1,5 @@
-import { Meta, StoryObj } from '@storybook/react'
+import { ComponentStoryObj, Meta, StoryObj } from '@storybook/react'
+import { screen, userEvent } from '@storybook/testing-library'
 
 import { Presentation } from './Page'
 
@@ -12,4 +13,13 @@ export const Standard: StoryObj<typeof Presentation> = {
 
 export const NoResult: StoryObj<typeof Presentation> = {
   args: { tax: null },
+}
+
+export const ValidationError: ComponentStoryObj<typeof Presentation> = {
+  args: { tax: null },
+  play: () => {
+    userEvent.clear(screen.getByLabelText('勤続年数'))
+    userEvent.clear(screen.getByLabelText('退職金'))
+    userEvent.tab()
+  },
 }

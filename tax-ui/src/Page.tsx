@@ -17,8 +17,8 @@ export const Presentation = ({ tax, onInputFormSubmit }: PresentationProps) => (
     <Heading>退職金の所得税計算アプリケーション</Heading>
     <HStack w="100%">
       <Spacer />
-      <InputForm w="400px" h="500px" onInputFormSubmit={onInputFormSubmit} />
-      <Result w="400px" h="500px" tax={tax} />
+      <InputForm w="400px" h="550px" onInputFormSubmit={onInputFormSubmit} />
+      <Result w="400px" h="550px" tax={tax} />
       <Spacer />
     </HStack>
   </VStack>
