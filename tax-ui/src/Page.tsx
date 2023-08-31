@@ -5,7 +5,7 @@ import { Heading, HStack, Spacer, VStack } from '@chakra-ui/react'
 
 import { FormInputs, InputForm } from './InputForm'
 import { Result } from './Result'
-import { CalcTaxParam, CalcTaxResult, useCalcTax } from './useCalcTax'
+import { CalcTaxResult, useCalcTax } from './useCalcTax'
 
 type PresentationProps = {
   tax: number | null
@@ -17,8 +17,8 @@ export const Presentation = ({ tax, onInputFormSubmit }: PresentationProps) => (
     <Heading>退職金の所得税計算アプリケーション</Heading>
     <HStack w="100%">
       <Spacer />
-      <InputForm w="400px" h="500px" onInputFormSubmit={onInputFormSubmit} />
-      <Result w="400px" h="500px" tax={tax} />
+      <InputForm w="400px" h="550px" onInputFormSubmit={onInputFormSubmit} />
+      <Result w="400px" h="550px" tax={tax} />
       <Spacer />
     </HStack>
   </VStack>
@@ -31,16 +31,8 @@ export const Page = () => {
   const { mutate } = useCalcTax()
 
   const handleInputFormSubmit = (formInputs: FormInputs) => {
-    // フォームとAPIパラメータで型が異なるので変換
-    const params: CalcTaxParam = {
-      yearsOfService: Number(formInputs.yearsOfService),
-      isDisability: formInputs.isDisability,
-      isBoardMember: !!Number(formInputs.isBoardMember),
-      severancePay: Number(formInputs.severancePay),
-    }
-
     // API呼び出し
-    mutate(params, {
+    mutate(formInputs, {
       onSuccess: async (data) => {
         if (data.ok) {
           const json = (await data.json()) as CalcTaxResult
