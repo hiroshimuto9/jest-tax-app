@@ -37,7 +37,7 @@ export const Presentation = ({
 
 export const Page = () => {
   const [calcStatus, setCalcStatus] = useState<CalcStatus>('before-calculation')
-  const [tax, setTax] = useState<number | null>(null)
+  const [tax, setTax] = useState<number>(0)
 
   // フックを使用してmutate関数を取得する
   const { mutate } = useCalcTax()
@@ -51,11 +51,14 @@ export const Page = () => {
           const json = (await data.json()) as CalcTaxResult
           setCalcStatus('succeeded')
           setTax(json.tax)
+        } else {
+          setCalcStatus('failed')
+          setTax(0)
         }
       },
       onError: () => {
         setCalcStatus('failed')
-        setTax(null)
+        setTax(0)
       },
     })
   }
