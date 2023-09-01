@@ -36,19 +36,26 @@ export const Presentation = ({
 )
 
 export const Page = () => {
+  const [calcStatus, setCalcStatus] = useState<CalcStatus>('before-calculation')
   const [tax, setTax] = useState<number | null>(null)
 
   // フックを使用してmutate関数を取得する
   const { mutate } = useCalcTax()
 
   const handleInputFormSubmit = (formInputs: FormInputs) => {
+    setCalcStatus('under-calculation')
     // API呼び出し
     mutate(formInputs, {
       onSuccess: async (data) => {
         if (data.ok) {
           const json = (await data.json()) as CalcTaxResult
+          setCalcStatus('succeeded')
           setTax(json.tax)
         }
+      },
+      onError: () => {
+        setCalcStatus('failed')
+        setTax(null)
       },
     })
   }
@@ -57,8 +64,7 @@ export const Page = () => {
     <Presentation
       tax={tax}
       onInputFormSubmit={handleInputFormSubmit}
-      // Todo 一旦成功状態を渡す
-      calcStatus={'succeeded'}
+      calcStatus={calcStatus}
     />
   )
 }
