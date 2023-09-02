@@ -9,7 +9,7 @@ import { Result } from './Result'
 import { CalcTaxResult, useCalcTax } from './useCalcTax'
 
 type PresentationProps = {
-  tax: number | null
+  tax: number
   onInputFormSubmit: SubmitHandler<FormInputs>
   calcStatus: CalcStatus
 }
@@ -36,31 +36,10 @@ export const Presentation = ({
 )
 
 export const Page = () => {
-  const [calcStatus, setCalcStatus] = useState<CalcStatus>('before-calculation')
-  const [tax, setTax] = useState<number>(0)
-
-  // フックを使用してmutate関数を取得する
-  const { mutate } = useCalcTax()
+  const { mutate, tax, calcStatus } = useCalcTax()
 
   const handleInputFormSubmit = (formInputs: FormInputs) => {
-    setCalcStatus('under-calculation')
-    // API呼び出し
-    mutate(formInputs, {
-      onSuccess: async (data) => {
-        if (data.ok) {
-          const json = (await data.json()) as CalcTaxResult
-          setCalcStatus('succeeded')
-          setTax(json.tax)
-        } else {
-          setCalcStatus('failed')
-          setTax(0)
-        }
-      },
-      onError: () => {
-        setCalcStatus('failed')
-        setTax(0)
-      },
-    })
+    mutate(formInputs)
   }
 
   return (
