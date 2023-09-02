@@ -9,7 +9,7 @@ import { Result } from './Result'
 import { CalcTaxResult, useCalcTax } from './useCalcTax'
 
 type PresentationProps = {
-  tax: number | null
+  tax: number
   onInputFormSubmit: SubmitHandler<FormInputs>
   calcStatus: CalcStatus
 }

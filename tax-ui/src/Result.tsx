@@ -17,7 +17,7 @@ import {
 import { CalcStatus } from './calcStatus'
 
 type ResultProps = CardProps & {
-  tax: number | null
+  tax: number
   calcStatus: CalcStatus
 }
 
@@ -47,7 +47,7 @@ const FailedView = () => (
   </Alert>
 )
 
-const SucceededView = ({ tax }: { tax: number | null }) => {
+const SucceededView = ({ tax }: { tax: number }) => {
   const taxStr = formatPrice(tax ?? 0)
   return (
     <Box aria-label="tax">
@@ -65,7 +65,7 @@ const CalcStatusView = ({
   tax,
   calcStatus,
 }: {
-  tax: number | null
+  tax: number
   calcStatus: CalcStatus
 }) => {
   switch (calcStatus) {
